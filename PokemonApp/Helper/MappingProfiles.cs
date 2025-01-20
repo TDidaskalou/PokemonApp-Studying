@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using PokemonApp.Dto;
 using PokemonApp.Models;
 
 namespace PokemonApp.Helper
@@ -8,6 +9,8 @@ namespace PokemonApp.Helper
         public MappingProfiles()
         {
             CreateMap<Pokemon, PokemonDto>();
+            CreateMap<Category, CategoryDto>();
+            CreateMap<Country,CountryDto>();
         }
     }
 }
