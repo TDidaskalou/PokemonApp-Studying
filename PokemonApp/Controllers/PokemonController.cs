@@ -76,7 +76,7 @@ namespace PokemonApp.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        //2η ΑΛΛΑΓΗ ΓΙΑ ERROR το  [FromQuery] int ownerId, [FromQuery] int catId,
+        // ΑΛΛΑΓΗ ΓΙΑ ERROR το  [FromQuery] int ownerId, [FromQuery] int catId,
         public IActionResult CreatePokemon([FromQuery] int ownerId, [FromQuery] int catId, [FromBody] PokemonDto pokemonCreate)
         {
             if (pokemonCreate == null)
