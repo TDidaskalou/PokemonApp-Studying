@@ -82,10 +82,10 @@ namespace PokemonApp.Controllers
             if (pokemonCreate == null)
                 return BadRequest(ModelState);
 
-            var pokemons = _pokemonRepository.GetPokemons().Where(c => c.Name.Trim().ToUpper() == pokemonCreate.Name.TrimEnd().ToUpper())
+            var pokemon = _pokemonRepository.GetPokemons().Where(c => c.Name.Trim().ToUpper() == pokemonCreate.Name.TrimEnd().ToUpper())
                 .FirstOrDefault();
 
-            if (pokemons != null)
+            if (pokemon != null)
             {
                 ModelState.AddModelError("", "Owner already exists");
                 return StatusCode(422, ModelState);

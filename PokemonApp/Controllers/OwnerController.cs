@@ -12,7 +12,7 @@ namespace PokemonApp.Controllers
     public class OwnerController: Controller
     {
         private readonly IOwnerRepository _ownerRepository;
-        //1η ΑΛΛΑΓΗ ΓΙΑ ERROR 
+        //1η ΑΛΛΑΓΗ ΓΙΑ ERROR ΤΗΣ SQL
         private readonly ICountryRepository _countryRepository;
         private readonly IMapper _mapper;
 
@@ -76,7 +76,7 @@ namespace PokemonApp.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        //2η ΑΛΛΑΓΗ ΓΙΑ ERROR το  [FromQuery] int countryId
+        //2η ΑΛΛΑΓΗ ΓΙΑ ERROR ΤΗΣ SQL το  [FromQuery] int countryId
         public IActionResult CreateOwner([FromQuery] int countryId,[FromBody] OwnerDto ownerCreate)
         {
             if (ownerCreate == null)
@@ -95,7 +95,7 @@ namespace PokemonApp.Controllers
                 return BadRequest(ModelState);
 
             var ownerMap = _mapper.Map<Owner>(ownerCreate);
-            //3η ΑΛΛΑΓΗ ΓΙΑ ERROR προσθετουμε το country στον owner
+            //3η ΑΛΛΑΓΗ ΓΙΑ ERROR ΤΗΣ SQL προσθετουμε το country στον owner
             ownerMap.Country = _countryRepository.GetCountry(countryId);
 
             if (!_ownerRepository.CreateOwner(ownerMap))

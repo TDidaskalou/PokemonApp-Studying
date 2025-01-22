@@ -15,6 +15,8 @@ namespace PokemonApp.Repository
 
         public bool CreatePokemon(int ownerId, int categoryId, Pokemon pokemon)
         {
+            //AΛΛΑΓΗ ΓΙΑ ERROR MANY TO MANY  -- ΦΤΙΑΧΝΟΥΜΕ "ΕΙΚΟΝΙΚΟΥΣ POKEMONOWNERS ΚΑΙ CATEGORY
+            //KΑΙ ΑΠΟ ΤΟ CONTROLLER ΘΑ ΠΑΡΟΥΜΕ ΤΑ ΣΩΣΤΑ ID ΓΙΑ ΝΑ ΚΑΝΟΥΜΕ ΤΗΝ ΣΩΣΤΗ ΑΝΤΙΣΤΟΙΧΗΣΗ ΤΩΝ ΠΙΝΑΚΩΝ
             var pokemonOwnerEntity = _context.Owners.Where(a => a.Id ==ownerId).FirstOrDefault();
             var category = _context.Categories.Where(a=> a.Id == categoryId).FirstOrDefault();
 
