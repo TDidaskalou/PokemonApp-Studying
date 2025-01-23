@@ -143,5 +143,38 @@ namespace PokemonApp.Controllers
 
         }
 
+
+        [HttpDelete("{pokeId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeletePokemon(int pokeId)
+        {
+            if (!_pokemonRepository.PokemonExists(pokeId))
+                return NotFound();
+
+
+            //ΑΛΛΑΓΗ ΓΙΑ DELETE 
+            var reviewsToDelete = _reviewRepository.GetReviewsOfAPokemon(pokeId);
+
+
+            var pokemonToDelete = _pokemonRepository.GetPokemon(pokeId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            // ΓΙΑ ΝΑ ΔΟΥΛΕΨΕΙ ΤΟ DELETE REVIEWS ΚΑΝΑΜΕ ΞΕΧΩΙΣΤΗ ΔΟΥΛΕΙΑ ΣΤΟ REVIEW REPOSITORY ΧΡΗΣΙΜΟΠΟΙΩΝΤΑΣ ΤΟ .REMOVERANGE 
+            if (!_reviewRepository.DeleteReviews(reviewsToDelete.ToList()))
+            {
+                ModelState.AddModelError("", "Something went wrong when deleting this pokemon reviews");
+            }
+
+            if (!_pokemonRepository.DeletePokemon(pokemonToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong when deleting Pokemon");
+            }
+
+            return Ok("Pokemon Deleted");
+        }
+
     }
 }

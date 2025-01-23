@@ -138,5 +138,28 @@ namespace PokemonApp.Controllers
             return Ok("Succesfuly updated owner");
 
         }
+
+        [HttpDelete("{ownerId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult DeleteCountry(int ownerId)
+        {
+            if (!_ownerRepository.OwnerExists(ownerId))
+                return NotFound();
+
+            var ownerToDelete = _ownerRepository.GetOwner(ownerId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_ownerRepository.DeleteOwner(ownerToDelete))
+            {
+                ModelState.AddModelError("", "Something went wrong when deleting Owner");
+            }
+
+            return Ok("Owner Deleted");
+        }
+
     }
 }
