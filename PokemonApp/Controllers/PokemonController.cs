@@ -18,11 +18,13 @@ namespace PokemonApp.Controllers
     {
         private readonly IPokemonRepository _pokemonRepository;
         private readonly IMapper _mapper;
+        private readonly IReviewRepository _reviewRepository;
 
-        public PokemonController(IPokemonRepository pokemonRepository, IMapper _mapper)
+        public PokemonController(IPokemonRepository pokemonRepository, IMapper _mapper,IReviewRepository reviewRepository)
         {
             this._pokemonRepository = pokemonRepository;
             this._mapper = _mapper;
+            this._reviewRepository = reviewRepository;
         }
 
         [HttpGet]
@@ -76,7 +78,7 @@ namespace PokemonApp.Controllers
         [HttpPost]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        // ΑΛΛΑΓΗ ΓΙΑ ERROR το  [FromQuery] int ownerId, [FromQuery] int catId,
+        // ΑΛΛΑΓΗ ΓΙΑ ERROR ΣΤΟ CREATE το  [FromQuery] int ownerId, [FromQuery] int catId,
         public IActionResult CreatePokemon([FromQuery] int ownerId, [FromQuery] int catId, [FromBody] PokemonDto pokemonCreate)
         {
             if (pokemonCreate == null)
@@ -107,6 +109,39 @@ namespace PokemonApp.Controllers
             return Ok("Succesfully Created");
         }
 
+
+
+        [HttpPut("{pokeId}")]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(404)]
+        public IActionResult UpdateCategory( int pokeId, [FromQuery] int ownerId, [FromQuery] int categoryId, [FromBody] PokemonDto updatedPokemon)
+        {
+            if (updatedPokemon == null)
+                return BadRequest(ModelState);
+
+            if (pokeId != updatedPokemon.Id)
+                return BadRequest(ModelState);
+
+
+            if (!_pokemonRepository.PokemonExists(pokeId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var pokemonMap = _mapper.Map<Pokemon>(updatedPokemon);
+
+
+            if (!_pokemonRepository.UpdatePokemon(ownerId,categoryId,pokemonMap))
+            {
+                ModelState.AddModelError("", "Something went wrong with updating reviewer");
+                return StatusCode(500, ModelState);
+            }
+
+            return Ok("Succesfuly updated pokemon");
+
+        }
 
     }
 }
